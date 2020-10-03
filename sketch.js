@@ -86,6 +86,12 @@ function draw() {
     //make monkey move forward
     monkey.velocityX = 3;
 
+    //make backdrop move 
+    backdrop.velocityX = -3;
+    if (backdrop.x < camera.position.x - 250) {
+      backdrop.x = camera.position.x;
+    }
+
     //monkey jumps when space pressed
     if (keyDown("space") && monkey.isTouching(invisibleGround)) {
       monkey.velocityY = -20;
@@ -101,7 +107,7 @@ function draw() {
       if (monkey.isTouching(bananaGroup[i])) {
         bananaGroup[i].destroy();
         bananasEaten++;
-        score = score + 2;
+        score += 2;
       }
     }
 
@@ -143,8 +149,7 @@ function draw() {
         break;
     }
 
-  }
-  if (gameState === HIT) {
+  }else if (gameState === HIT) {
 
     //monkey jumps when space pressed
     if (keyDown("space") && monkey.isTouching(invisibleGround)) {
@@ -199,15 +204,21 @@ function draw() {
 
   } else if (gameState === END) {
 
+    //change backdrop, display game over message
+    background("black");
+    text("GAME OVER!", monkey.x, 150);
+
     monkey.addImage("monkey", monkeyStanding);
 
     //never destroy bananas and rocks
     bananaGroup.setLifetimeEach(-1);
     rockGroup.setLifetimeEach(-1);
 
-    //display game over
-    //text("GAME OVER!", displayWidth/2, 200);
-
+    //stop moving game objects
+    backdrop.velocityX = 0;
+    monkey.velocityY = 0;
+    bananaGroup.setVelocityXEach(0);
+    rockGroup.setVelocityXEach(0);
   }
 
   //draw all sprites
@@ -221,32 +232,38 @@ function draw() {
 }
 
 
+//spawn bananas every 80 frames
 function spawnBananas() {
 
-  for(var i = 500; i <= 3000; i+= 300){
-    if (frameCount % 80 === 0) {
-      banana = createSprite(i, 150, 0, 0);
-      banana.y = Math.round(random(100, 200));
-      banana.addImage("banana", bananaImage);
-      banana.scale = 0.05;
-      bananaGroup.add(banana);
-      banana.lifetime = 200;
-    }
-  }
+  //if(gameState =! END){
+      if (frameCount % 80 === 0) {
+        banana = createSprite(510, 150, 0, 0);
+        banana.x = camera.position.x + 200;
+        banana.y = Math.round(random(100, 200));
+        banana.addImage("banana", bananaImage);
+        banana.scale = 0.05;
+        bananaGroup.add(banana);
+        banana.lifetime = 200;
+      }
+  //}
 }
 
 
+//spawn rocks every 120 frames
 function spawnRocks() {
 
-  for(var j = 500; j <= 3000; j+= 500){
-    if (frameCount > 100 && frameCount % 120 === 0) {
-      rock = createSprite(j, 275, 0, 0);
-      rock.addImage("rock", rockImage);
-      rock.scale = 0.2;
-      rockGroup.add(rock);
-      rock.lifetime = 200;
-      rock.setCollider("circle", 0, 0, 5);
-    }
-  }
+  //if(gameState =! END){
+    //for(var j = 500; j >= 0; j+= 500){
+      if (frameCount > 100 && frameCount % 120 === 0) {
+        rock = createSprite(510, 275, 0, 0);
+        rock.x = camera.position.x + 200;
+        rock.addImage("rock", rockImage);
+        rock.scale = 0.2;
+        rockGroup.add(rock);
+        rock.lifetime = 200;
+        rock.setCollider("circle", 0, 0, 5);
+      }
+    //}
+  //}
 }
 
