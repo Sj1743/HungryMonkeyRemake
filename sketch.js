@@ -15,6 +15,7 @@ function preload() {
 
   //images for background, banana and rock
   backgroundImage = loadImage("images/jungle2.jpg");
+  gameOverImage = loadImage("images/GameOver.jpg")
   bananaImage = loadImage("images/Banana.png");
   rockImage = loadImage("images/stone.png");
   monkeyStanding = loadImage("images/Monkey_01.png");
@@ -204,9 +205,9 @@ function draw() {
 
   } else if (gameState === END) {
 
-    //change backdrop, display game over message
-    background("black");
-    text("GAME OVER!", monkey.x, 150);
+    //display game over message
+    background(gameOverImage);
+    //text("GAME OVER!", monkey.x, 150);
 
     monkey.addImage("monkey", monkeyStanding);
 
